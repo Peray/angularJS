@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="anchor">
+<head>
+	<title>test</title>
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="ngmodules/angular-bootstrap-grid-tree/src/treeGrid.css">
+</head>
+<body ng-controller="anchorCtrl">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<button class="btn btn-primary" ng-click="throwEx()">throw exception</button>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script src="ngmodules/jquery/2.2.4/jquery.min.js"></script>
+	<script src="ngmodules/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+	<script>
+		var app = angular.module('anchor', []);
+
+		app.factory('$exceptionHandler', ['$log', function($log){
+			return function(ex, cause){
+				$log.error("Message:" + ex.message + "(Cause:" + cause +")");
+			};
+		}])
+
+		app.controller('anchorCtrl', ['$scope', '$location', '$anchorScroll', '$exceptionHandler', function($scope, $location, $anchorScroll, $exceptionHandler){
+
+			$scope.throwEx = function(){
+				try {
+					throw new Error("...")
+				} catch(ex) {
+					$exceptionHandler(ex.message, 'button click')
+				}
+			};
+
+		}])
+
+	</script>
+
+</body>
+</html>

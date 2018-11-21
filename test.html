@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html ng-app="test">
+<head>
+	<title>test</title>
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="ngmodules/angular-bootstrap-grid-tree/src/treeGrid.css">
+</head>
+<body ng-controller="testCtrl">
+	<div>Delayed Message: {{message}}</div>
+	<p>{{price | number:0}}</p>
+	<p>{{price | currency:'￥'}}</p>
+
+	<input type="text" ng-model="filterString" />
+	<tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" on-click="my_tree.select_first_branch" icon-leaf="glyphicon glyphicon-globe">
+    </tree-grid>
+
+
+    <panel>The data value comes from the : {{dataSource}}</panel><hr/>
+	<div class="dropdown">
+		<input class="form-control" type="text" data-toggle="dropdown" aria-expanded="true" />
+		<div class="dropdown-menu">11111111</div>
+	</div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script src="ngmodules/jquery/2.2.4/jquery.min.js"></script>
+	<script src="ngmodules/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular-route.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular-resource.min.js"></script>
+	<script src="ngmodules/angular-bootstrap-grid-tree/src/tree-grid-directive.js"></script>
+
+	<script type="text/ng-template" id="template">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>This is panel</h4>
+			</div>
+			<div class="panel-body" ng-transclude></div>
+		</div>
+	</script>
+	<script>
+		var app = angular.module('test', ['treeGrid']);
+
+		app.directive('panel', function() {
+			return {
+				link: function(scope, element, attrs) {
+					scope.dataSource = "direcrive";
+				},
+				restrict: 'E',
+				scope: true,
+				template: function() {
+					return angular.element(
+						document.querySelector("#template")).html();
+				},
+				transclude:true
+				// replace: true
+			}
+		});
+
+		app.controller('testCtrl', ['$scope', '$timeout', function($scope, $timeout){
+
+			$scope.dataSource = 'controller'
+			$scope.getMessage = function() {
+				// 当调用$digest的时候，只触发当前作用域和它的子作用域上的监控，但是当调用$apply的时候，会触发作用域树上的所有监控。
+
+
+				//方式一：手动调用$digest或$apply
+		        // setTimeout(function() {
+		        //   $scope.message = 'Fetched after 3 seconds';
+		        //   console.log('message:'+$scope.message);
+		        //   $scope.$digest();
+		        // }, 2000);
+
+		        //方式二：$timeout自动调用$digest或$apply
+		        $timeout(function () {
+		        	$scope.message = 'Fetched after 3 seconds';
+		          	console.log('message:'+$scope.message);
+		        }, 2000)
+		    };
+		      
+		    $scope.getMessage();
+
+
+		    $scope.price = 500;
+
+
+		    $scope.tree_data = [{
+		    	key: 1,
+		    	name: 'John Brown sr.',
+		    	age: 60,
+		    	address: 'New York No. 1 Lake Park',
+		    	children: [{
+		    		key: 11,
+		    		name: 'John Brown',
+		    		age: 42,
+		    		address: 'New York No. 2 Lake Park',
+		    	}, {
+		    		key: 12,
+		    		name: 'John Brown jr.',
+		    		age: 30,
+		    		address: 'New York No. 3 Lake Park',
+		    		children: [{
+		    			key: 121,
+		    			name: 'Jimmy Brown',
+		    			age: 16,
+		    			address: 'New York No. 3 Lake Park',
+		    		}],
+		    	}, {
+		    		key: 13,
+		    		name: 'Jim Green sr.',
+		    		age: 72,
+		    		address: 'London No. 1 Lake Park',
+		    		children: [{
+		    			key: 131,
+		    			name: 'Jim Green',
+		    			age: 420,
+		    			address: 'London No. 2 Lake Park',
+		    			children: [{
+		    				key: 1311,
+		    				name: 'Jim Green jr.',
+		    				age: 25,
+		    				address: 'London No. 3 Lake Park',
+		    			}, {
+		    				key: 1312,
+		    				name: 'Jimmy Green sr.',
+		    				age: 18,
+		    				address: 'London No. 4 Lake Park',
+		    			}],
+		    		}],
+		    	}],
+		    }, {
+		    	key: 2,
+		    	name: 'Joe Black',
+		    	age: 32,
+		    	address: 'Sidney No. 1 Lake Park',
+		    }];
+
+
+		 //    //注意：必须在全局先声明$scope.tree_data为空数组
+		 //    $scope.tree_data = [];
+
+			// //查询树形组织机构
+			// $scope.getTree=function () {
+			// 	xxxService.getTree().then(function (data) {
+			// 		if(data && data.result){
+			// 			$scope.tree_data = data.result;
+			// 			loadingService.uniqueHide(dataLoading);
+			// 		}
+			// 	})
+			// };
+
+			$scope.expanding_property = {
+			    field: "name",   //name表示数据中的属性名
+			    displayName: "",
+			    sortable : true,
+			    filterable: true,
+			    class: "col-xs-1",
+			    showAction:false
+			};
+
+			$scope.col_defs = [{
+				field: "age",
+				displayName: "age",
+				sortable : true,
+				sortingType : "number",
+				filterable: true,
+				class: "col-xs-6",
+				// cellTemplate: "<img ng-src='{{ row.branch[col.field] }}' />"
+			},
+			{
+				field: "address",
+				displayName: "address",
+				sortable : true,
+				sortingType : "string",
+				filterable: true,
+				class: "col-xs-5"
+			}];
+
+
+			$scope.products = [
+				{name: "Apples", category: "Fruit", price: "1.20", expiry: 10},
+				{name: "Apples", category: "Fruit", price: "1.20", expiry: 7},
+				{name: "Apples", category: "Fruit", price: "1.20", expiry: 6}
+			]
+
+
+		}])
+
+	</script>
+
+</body>
+</html>

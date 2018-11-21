@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="parse">
+<head>
+	<title>$parse</title>
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body ng-controller="parseCtrl">
+	<div class="well">
+		<p><input class="form-control" ng-model="dataValue"></p>
+		<div>
+			Result: <span eval-expression amount="dataValue" tax="10"></span>
+		</div>
+	</div>
+
+
+	<script src="ngmodules/jquery/2.2.4/jquery.min.js"></script>
+	<script src="ngmodules/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+	<script>
+		angular.module('parse', [])
+		.controller('parseCtrl', ['$scope', '$parse', function($scope,$parse){
+			$scope.dataValue = '100.23';
+
+		}])
+		.directive('evalExpression', ['$parse', function($parse){
+			var expressionFn = $parse("total | currency");
+			return {
+				scope: {
+					amount: "=amount",
+					tax: "=tax"
+				},
+				link: function(scope, element, attrs) {
+					scope.$watch('amount', function(newValue) {
+						var localData = {
+							total: Number(newValue) + (Number(newValue) * (Number(scope.tax) / 100))
+						}
+						element.text(expressionFn(scope, localData));
+					});
+				}
+			}
+		}]);
+
+	</script>
+
+</body>
+</html>

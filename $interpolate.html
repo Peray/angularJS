@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>$interpolate</title>
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body ng-controller="exampleCtrl">
+	<div class="well">
+		<p><input class="form-control" ng-model="dataValue"></p>
+		<div>
+			Result: <span eval-expression amount="dataValue" tax="10"></span>
+		</div>
+		<p>Result:!!dataValue!!</p>
+	</div>
+
+
+	<script src="ngmodules/jquery/2.2.4/jquery.min.js"></script>
+	<script src="ngmodules/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+	<script>
+		angular.module('myApp', [])
+		.config(['$interpolateProvider',function($interpolateProvider) {
+			$interpolateProvider.startSymbol("!!");//用来替换{{
+			$interpolateProvider.endSymbol("!!");//用来替换}}
+		}])
+		.controller('exampleCtrl', ['$scope', '$parse', function($scope,$parse){
+			$scope.dataValue = '100.23';
+
+		}])
+		.directive('evalExpression', ['$interpolate', function($interpolate){
+			var interpolateFn = $interpolate("The total is: !!amount | currency!! (including tax)");
+			return {
+				scope: {
+					amount: "=amount",
+					tax: "=tax"
+				},
+				link: function(scope, element, attrs) {
+					scope.$watch('amount', function(newValue) {
+						var localData = {
+							total: Number(newValue) + (Number(newValue) * (Number(scope.tax) / 100))
+						}
+						element.text(interpolateFn(scope));
+					});
+				}
+			}
+		}]);
+
+	</script>
+
+</body>
+</html>

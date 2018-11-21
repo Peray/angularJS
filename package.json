@@ -1,0 +1,16 @@
+{
+  "name": "gulpdemo",
+  "version": "1.0.0",
+  "description": "this is a test\u001b[D\u001b[D\u001b[D\u001b[Dgulptest",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "peray",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.24.4",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^4.0.1"
+  }
+}

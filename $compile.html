@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>$compile</title>
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body ng-controller="exampleCtrl">
+	<div class="well">
+		<span eval-expression></span>
+	</div>
+
+
+	<script src="ngmodules/jquery/2.2.4/jquery.min.js"></script>
+	<script src="ngmodules/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+	<script>
+		angular.module('myApp', [])
+		.controller('exampleCtrl', ['$scope', function($scope){
+			$scope.cities = ["伦敦", "巴黎", "纽约"];
+
+		}])
+		.directive('evalExpression', ['$compile', function($compile){
+			return function(scope, element, attrs){
+				var content = "<ul><li ng-repeat='city in cities'>{{city}}</li></ul>";
+				var listElem = angular.element(content);
+				var compileFn = $compile(listElem);
+				compileFn(scope);
+				element.append(listElem);
+			}
+			
+		}]);
+
+	</script>
+
+</body>
+</html>

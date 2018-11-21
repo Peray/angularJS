@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="sportsStoreAdmin">
+<head>
+	<title>Administration</title>
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body>
+	<ng-view />
+
+
+
+	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular-route.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular-resource.min.js"></script>
+	<script>
+		angular.module('sportsStoreAdmin', ['ngRoute', 'ngResource'])
+			.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+				
+				$locationProvider.hashPrefix(''); // 1.6.x版本使用路由功能需加上这句 
+
+				$routeProvider
+
+					.when('/login', {
+						templateUrl: 'src/angular/views/admin/adminLogin.html'
+					})
+
+					.when('/main', {
+						templateUrl: 'src/angular/views/admin/adminMain.html'
+					})
+
+					.otherwise({
+						redirectTo: '/login'
+					})
+			}])
+	</script>
+	<script src="src/angular/controller/adminCtrl.js"></script>
+	<script src="src/angular/controller/adminProductCtrl.js"></script>
+</body>
+</html>

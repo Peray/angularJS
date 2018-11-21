@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="treeGridTest">
+  <head>
+    <link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ngmodules/angular-bootstrap-grid-tree/src/treeGrid.css">  
+  </head>
+  <body ng-controller="treeGridController" style="margin:20px">
+    <div ng-model="showMinDir" ng-value="false">
+        
+        <button ng-click="showMinDir=false" class="btn btn-primary btn-sm">Use standard directive</button>
+        <button ng-click="showMinDir=true" class="btn btn-primary btn-sm">Use minimum directive</button>
+        <br/><br/>
+        <div ng-show="!showMinDir">
+            <strong>standard directive: </strong><code>&lt;tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" expand-level="2" icon-leaf= "glyphicon glyphicon-globe"&gt;&lt;/tree-grid&gt;</code>
+            <br/>
+            <br/>
+            <button ng-click="my_tree.expand_all()" class="btn btn-default btn-sm">Expand All</button>
+            <button ng-click="my_tree.collapse_all()" class="btn btn-default btn-sm">Collapse All</button>
+            <input class="input-sm pull-right" type="text" data-ng-model="filterString"	placeholder="Filter" />
+            <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" on-click="" expand-level="2" icon-leaf= "glyphicon glyphicon-globe"></tree-grid>
+        </div>
+        <div ng-show="showMinDir">
+            <strong>bare minimum directive:</strong>
+            <code>&lt;tree-grid tree-data="tree_data"&gt;&lt;/tree-grid&gt;</code>
+            <br/>
+            <br/>
+            <tree-grid tree-data="tree_data"></tree-grid>
+        </div>
+    </div>
+    <script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+    <script src="ngmodules/angular-bootstrap-grid-tree/src/tree-grid-directive.js"></script> 
+    <script src="treeGridTest.js"></script>
+    <script> 
+    </script>
+  </body>
+</html>
