@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html ng-app="fileUpload">
+<head>
+	<title>test</title>
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<style type="text/css">
+		.drop-box {
+		    background: #F8F8F8;
+		    border: 5px dashed #DDD;
+		    width: 170px;
+		    text-align: center;
+		    padding: 50px 10px;
+		    margin-left: 10px;
+		}
+		.dragover {
+			border: 5px dashed green;
+		}
+		.dragover-err {
+			border: 5px dashed red;
+		}
+	</style>
+</head>
+<body ng-controller="fileUploadCtrl">
+	<form name="fileUpload">
+		<div class="drop-box" ngf-select ngf-drop 
+			name="file"  
+			ng-model="file" 
+			ngf-model-invalid="invalidFiles" 
+			ngf-model-options="{debounce:100}" 
+			ngf-pattern="image/*" 
+			ngf-accept="'image/*'" 
+			ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', pattern:'image/*'}" 
+			ngf-validate="{size: {max: '20MB', min: '10B'}}">选择拖动文件
+	    </div>
+	    <div ng-if="file">
+	    	<p>名称：{{file.name}}</p>
+	    	<p>大小：{{size}}</p>
+	    	<p>文件类型：{{file.type}}</p>
+	    </div>
+	    <div ngf-no-file-drop>浏览器不支持拖放</div>
+	    <div ng-if="fileUpload.$dirty && fileUpload.$invalid">
+	    	<div ng-if="fileUpload.file.$error.maxSize">所选文件超出20Mb</div>
+	    	<div ng-if="fileUpload.file.$error.pattern">所选文件格式不正确</div>
+	    </div>
+	    <div class="progress" ng-show="progress">
+			<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress}">{{progress}}</div>
+		</div>
+	    <button class="btn btn-default" ng-disabled="!file" type="button" ng-click="upload(file)">提交</button>
+	</form>
+	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script src="ngmodules/jquery/2.2.4/jquery.min.js"></script>
+	<script src="ngmodules/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
+	<script src="ngmodules/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
+	<script src="ngmodules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+	<script>
+		var app = angular.module('fileUpload', ['ngFileUpload']);
+
+		app.controller('fileUploadCtrl', ['$scope', 'Upload', function($scope, Upload){
+			$scope.upload = function(file) {
+				Upload.upload({
+		            url: 'upload/url',
+		            data: {file: file}
+		        }).then(function (resp) {
+		            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		        }, function (resp) {
+		            console.log('Error status: ' + resp.status);
+		        }, function (evt) {
+		            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+		            $scope.progress = !progressPercentage ? progressPercentage : (progressPercentage + '%');
+		            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+		        });
+			};
+
+			$scope._getSize = function(val) {
+				var size;
+				var b = val;
+				var kb = b/1024;
+				var mb = kb/1024;
+				if(kb < 1){
+					size = b.toFixed(1) + 'b';
+				}else {
+					if (kb < 1024) {
+						size = kb.toFixed(1) + 'k';
+					}else {
+						if(1 <= mb < 1024) {
+							size = mb.toFixed(1) + 'm';
+						}
+					}
+				}
+				return size;	
+			};
+
+			$scope.$watch('file.size', function(val){
+				if(!val) return;
+				$scope.size = $scope._getSize(val);
+			});
+		}]);
+	</script>
+
+</body>
+</html>
