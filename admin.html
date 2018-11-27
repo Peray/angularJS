@@ -2,17 +2,17 @@
 <html ng-app="sportsStoreAdmin">
 <head>
 	<title>Administration</title>
-	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link rel="stylesheet" href="ngmodules/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="lib/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="lib/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 </head>
 <body>
 	<ng-view />
 
 
 
-	<script src="ngmodules/angular/1.6.8/angular.min.js"></script>
-	<script src="ngmodules/angular/1.6.8/angular-route.min.js"></script>
-	<script src="ngmodules/angular/1.6.8/angular-resource.min.js"></script>
+	<script src="lib/angular/1.6.8/angular.min.js"></script>
+	<script src="lib/angular/1.6.8/angular-route.min.js"></script>
+	<script src="lib/angular/1.6.8/angular-resource.min.js"></script>
 	<script>
 		angular.module('sportsStoreAdmin', ['ngRoute', 'ngResource'])
 			.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
