@@ -1,38 +1,82 @@
-angular.module('exampleApp', ['increment', 'ngResource'])
+angular.module('exampleApp', ['increment', 'ngResource', 'ngRoute', 'ngAnimate'])
 .constant('baseUrl', 'http://localhost:5600/products/')
-.controller("defaultCtrl", function($scope, $http, $resource, baseUrl) {
+.factory('productsResource', ['$resource', 'baseUrl', function($resource, baseUrl){
+	return $resource(baseUrl + ":id", {id: "@id"}, 
+		{create: {method: "POST"}, save: {method: "PUT"}});
+}])
+.config(function($routeProvider, $locationProvider){
 
-	$scope.displayMode = 'list';
-	$scope.currentProduct = null;
+	$locationProvider.html5Mode(true);
+	// $locationProvider.hashPrefix(''); // 1.6.x版本使用路由功能需加上这句 
 
-	$scope.productResource = $resource(baseUrl + ":id", {id: "@id"});
+	$routeProvider.when("/list", {
+		templateUrl: 'src/html/restful/tableView.html',
+		controller: 'tableCtrl'
+	}).when("/edit/:id", {
+		templateUrl: 'src/html/restful/editorView.html',
+		controller: 'editCtrl'
+	}).when("/create", {
+		templateUrl: 'src/html/restful/editorView.html',
+		controller: 'editCtrl'
+	}).otherwise({
+		templateUrl: 'src/html/restful/tableView.html',
+		controller: 'tableCtrl',
+		resolve: {
+			data: function(productsResource) {
+				return productsResource.query();
+			}
+		}
+	});
+})
+.controller("defaultCtrl", ['$scope', '$location', 'productsResource', function($scope, $location, productsResource) {
 
-	$scope.listProducts = function () {
-		$scope.products = $scope.productResource.query();
+	$scope.data = {};
+
+	$scope.createProduct = function (product) {
+		new productsResource(product).$create().then(function(newProduct){
+			$scope.data.products.push(newProduct);
+			$location.path('/list');
+		});
 	};
 
 	$scope.deleteProduct = function (product) {
 		product.$delete().then(function() {
-			$scope.products.splice($scope.products.indexOf(product), 1);
+			$scope.data.products.splice($scope.data.products.indexOf(product), 1);
 		});
-		$scope.displayMode = 'list';
+		$location.path('/list');
 	};
 
-	$scope.createProduct = function (product) {
-		new $scope.productResource(product).$save().then(function(newProduct){
-			$scope.products.push(product);
-			$scope.displayMode = 'list';
-		});
+}])
+.controller("tableCtrl", function($scope, $location, $route, data) {
+
+	$scope.data.products = data;
+
+	$scope.refreshProducts = function () {
+		$route.reload();
+	};
+
+})
+.controller("editCtrl", function($scope, $location, $routeParams) {
+
+	$scope.currentProduct = null;
+
+	if($location.path().indexOf("/edit/") == 0) {
+		var id = $routeParams["id"];
+		for(var i = 0; i < $scope.data.products.length; i++) {
+			if($scope.data.products[i].id == id) {
+				$scope.currentProduct = $scope.data.products[i];
+				break;
+			}
+		}
+	}
+
+	$scope.cancleEdit = function () {
+		$location.path('/list');
 	};
 
 	$scope.updateProduct = function (product) {
 		product.$save();
-		$scope.displayMode = 'list';
-	};
-
-	$scope.editOrCreateProduct = function (product) {
-		$scope.currentProduct = product ? product : {};
-		$scope.displayMode = 'edit';
+		$location.path('/list');
 	};
 
 	$scope.saveEdit = function(product) {
@@ -41,15 +85,6 @@ angular.module('exampleApp', ['increment', 'ngResource'])
 		} else {
 			$scope.createProduct(product);
 		}
-	};
-
-	$scope.cancleEdit = function () {
-		if($scope.currentProduct && $scope.currentProduct.$get) {
-			$scope.currentProduct.$get();
-		}
 		$scope.currentProduct = {};
-		$scope.displayMode = 'list';
 	};
-
-	$scope.listProducts();
 });

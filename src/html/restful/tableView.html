@@ -7,20 +7,20 @@
 			<th></th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="item in products">
+			<tr ng-repeat="item in data.products">
 				<td>{{item.name}}</td>
 				<td>{{item.category}}</td>
 				<td class="text-right">{{item.price | currency}}</td>
 				<td class="text-center">
 					<button class="btn btn-xs btn-primary" ng-click="deleteProduct(item)">Delete</button>
-					<button class="btn btn-xs btn-primary" ng-click="editOrCreateProduct(item)">Edit</button>
+					<a class="btn btn-xs btn-primary" href="/edit/{{item.id}}">Edit</a>
 					<increment item="item" property-name="price" restful="true" method-name="$save" />
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	<div>
-		<button class="btn btn-xs btn-primary" ng-click="listProducts()">刷新</button>
-		<button class="btn btn-xs btn-primary" ng-click="editOrCreateProduct()">New</button>
+		<button class="btn btn-xs btn-primary" ng-click="refreshProducts()">刷新</button>
+		<a class="btn btn-xs btn-primary" href="create">New</a>
 	</div>
 </div>

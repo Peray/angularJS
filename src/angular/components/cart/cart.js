@@ -45,7 +45,7 @@ angular.module('cart', [])
 			// require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
 			restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
 			// template: '',
-			templateUrl: 'src/angular/components/cart/cartSummary.html',
+			templateUrl: '/src/angular/components/cart/cartSummary.html',
 			// replace: true,
 			// transclude: true,
 			// compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),

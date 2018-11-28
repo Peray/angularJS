@@ -16,7 +16,7 @@ gulp.task('browserSync', function() {
         	port: 8080,
             baseDir: './'
         },
-        startPath: '/upload.html'
+        startPath: '/src/html/upload.html'
     });
     gulp.watch(['src/**/*.scss', 'src/**/*.js', './*.html', 'src/**/*.html'], ['sass']).on('change', reload);
 });

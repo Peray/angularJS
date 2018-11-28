@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="swipeApp">
+<head>
+	<title>swipe</title>
+	<link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="/src/css/index.css">
+</head>
+<body ng-controller="swipeCtrl">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="well" ng-swipe-right="handleSwipe('left-to-right')" ng-swipe-left="handleSwipe('right-to-left')">
+				<h4>swipe here</h4>
+			</div>
+			<div>Swipe was: {{SwipeType}}</div>
+		</div>
+	</div>
+
+	<script src="/lib/angular/1.6.8/angular.min.js"></script>
+	<script src="/lib/angular/1.6.8/angular-touch.min.js"></script>
+
+	<script>
+		angular.module('swipeApp', ['ngTouch'])
+		.controller('swipeCtrl', ['$scope','$element', function($scope, $element){
+			$scope.SwipeType = '<None>';
+			$scope.handleSwipe = function(direction) {
+				$scope.SwipeType = direction;
+			};
+		}])
+	</script>
+</body>
+</html>
