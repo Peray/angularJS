@@ -10,103 +10,86 @@
 
 	<script src="/lib/jquery/2.2.4/jquery.min.js"></script>
 	<script src="/lib/echarts/echarts.js"></script>
-	<script src="/lib/echarts/echart-export-csv.js"></script>
 	<script>
-        // app.title = '多 X 轴示例';
-
-        var colors = ['#5793f3', '#d14a61', '#675bba'];
-
         var option = {
-            color: colors,
-
-            tooltip: {
-                trigger: 'none',
-                axisPointer: {
-                    type: 'cross'
-                }
+            xAxis: {
+                type: 'category',
+                data: ['2012/10/2', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             },
-            legend: {
-                data:['2015 降水量', '2016 降水量']
+            yAxis: {
+                type: 'value'
             },
-            grid: {
-                top: 70,
-                bottom: 50
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    axisTick: {
-                        alignWithLabel: true
-                    },
-                    axisLine: {
-                        onZero: false,
-                        lineStyle: {
-                            color: colors[1]
-                        }
-                    },
-                    axisPointer: {
-                        label: {
-                            formatter: function (params) {
-                                return '降水量  ' + params.value
-                                    + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
-                            }
-                        }
-                    },
-                    data: ["2016-1", "2016-2", "2016-3", "2016-4", "2016-5", "2016-6", "2016-7", "2016-8", "2016-9", "2016-10", "2016-11", "2016-12"]
-                },
-                {
-                    type: 'category',
-                    axisTick: {
-                        alignWithLabel: true
-                    },
-                    axisLine: {
-                        onZero: false,
-                        lineStyle: {
-                            color: colors[0]
-                        }
-                    },
-                    axisPointer: {
-                        label: {
-                            formatter: function (params) {
-                                return '降水量  ' + params.value
-                                    + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
-                            }
-                        }
-                    },
-                    data: ["2015-1", "2015-2", "2015-3", "2015-4", "2015-5", "2015-6", "2015-7", "2015-8", "2015-9", "2015-10", "2015-11", "2015-12"]
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            series: [
-                {
-                    name:'2015 降水量',
-                    type:'line',
-                    xAxisIndex: 1,
-                    smooth: true,
-                    data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-                },
-                {
-                    name:'2016 降水量',
-                    type:'line',
-                    smooth: true,
-                    data: [3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7]
-                }
-            ]
+            series: [{
+                data: [345, 230, 567, 456, 354, 770, 900],
+                type: 'line'
+            }]
         };
-
-
         var myChart = echarts.init(document.getElementById('container'));
         myChart.setOption(option);
+        
 
+        function arrayToCsv(data, args = {}) {
+            var columnDelimiter = args.columnDelimiter || ',';
+            var lineDelimiter = args.lineDelimiter || '\n';
+
+            return data.reduce(function(csv, row) {
+                var rowContent = Array.isArray(row) ? row.reduce(function(rowTemp, col) {
+                    col = typeof(col) === 'number' ? col.toString() : col;
+                    var ret = rowTemp ? rowTemp + columnDelimiter : rowTemp;
+                    if (col) {
+                        var formatedCol = col.toString().replace(new RegExp(lineDelimiter, 'g'), ' ');
+                        ret += /,/.test(formatedCol) ? "formatedCol" : formatedCol;
+                    }
+                    return ret;
+                }, '') : row;
+                return (csv ? csv + lineDelimiter : '') + rowContent;
+            }, '');
+        }
+
+
+        var BOM = '\uFEFF'; 
+        function exportCsv(inputData, filename = 'export.csv') {
+            var csv = arrayToCsv(inputData);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                var uri = encodeURI(`data:text/csv;charset=utf-8,${BOM}${csv}`);
+                var downloadLink = document.createElement('a');
+                downloadLink.href = uri;
+                downloadLink.download = filename;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+        }
+
+        function arrayConversion(arrs){
+            var arrs = [];
+            var options = myChart._model.option;
+            var legend = options.legend.length && options.legend[0].data ? ['时间'].concat(options.legend[0].data) : ['时间', '访问用户量'];
+            arrs.push(options.xAxis[0].data);
+            for (var i = 0; i < options.series.length; i++) {   
+                arrs.push(options.series[i].data)
+            }
+
+            var arrFinal = [];
+            arrFinal.push(legend);
+            for (var i = 0; i < arrs[0].length; i++) {                    
+                var tmp = [];
+                for (var j = 0; j < arrs.length; j++) {
+                    tmp.push(arrs[j][i]);
+                }
+                arrFinal.push(tmp);
+            }
+            console.log(arrFinal)
+            return arrFinal;
+        }
 
         $("#download").click(function(){
-            console.log(echarts)
-        	console.log(myChart)
-            myChart.downloadCSV();
+            var arrs = arrayConversion(arrs);
+            exportCsv(arrs);
         })
     </script>
 </body>
