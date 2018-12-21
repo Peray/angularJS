@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html ng-app="svg">
+<head>
+	<title>svg</title>
+	<link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body ng-controller="svgCtrl">
+	
+	<svg width="10" height="10">
+		<rect x="0" y="0" width="10" height="10" fill="red" />
+	</svg>
+	<svg width="10" height="10">
+		<circle cx="5" cy="5" r="5" fill="blue" />
+	</svg>
+
+	<div></div>
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script src="/lib/jquery/2.2.4/jquery.min.js"></script>
+	<script src="/lib/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="/lib/angular/1.6.8/angular.min.js"></script>
+	<script>
+		var app = angular.module('svg', []);
+
+		app.controller('svgCtrl', ['$scope', function($scope){
+			
+			function pieChart(data, width, height, cx, cy, r, colors, labels, lx, ly) {
+				var svgns = "http://www.w3.org/2000/svg";
+
+				var chart = document.createElementNS(svgns, "svg:svg");
+				chart.setAttribute('width', width);
+				chart.setAttribute('height', height);
+				chart.setAttribute('viewBox', "0 0 " + width + " " + height);
+
+				var total = 0;
+				for(var i = 0;i < data.length; i++) total += data[i];
+
+				var angles = [];
+				for(var i = 0;i < data.length; i++) angles[i] = data[i]/total*Math.PI*2;
+
+				startangle = 0;
+				for(var i = 0;i < data.length; i++) {
+					var endangle = startangle + angles[i];
+
+					var x1 = cx + r *Math.sin(startangle);
+					var y1 = cy - r *Math.cos(startangle);
+					var x2 = cx + r *Math.sin(endangle);
+					var y2 = cy - r *Math.cos(endangle);
+
+					var big = 0;
+					if(endangle - startangle > Math.PI) big = 1;
+
+					var path = document.createElementNS(svgns, 'path');
+
+					var d = "M " + cx + "," + cy + 
+						" L " + x1 + "," + y1 +
+						" A " + r + "," + r +
+						" 0 " + big + " 1 " +
+						x2 + "," + y2 +
+						" Z";
+
+					path.setAttribute('d', d);
+					path.setAttribute('fill', colors[i]);
+					path.setAttribute('stroke', "black");
+					path.setAttribute('stroke-width', "2");
+					chart.appendChild(path);
+
+					startangle = endangle;
+
+					var icon = document.createElementNS(svgns, 'rect');
+					icon.setAttribute('x', lx);
+					icon.setAttribute('y', ly + 30*i);
+					icon.setAttribute('width', 20);
+					icon.setAttribute('height', 20);
+					icon.setAttribute('fill', colors[i]);
+					icon.setAttribute('stroke', "black");
+					icon.setAttribute('stroke-width', '2');
+					chart.appendChild(icon);
+
+					var label = document.createElementNS(svgns, 'text');
+					label.setAttribute('x', lx + 30);
+					label.setAttribute('y', ly + 30*i + 18);
+					label.setAttribute('font-family', "sans-serif");
+					label.setAttribute('font-size', "16");
+					label.appendChild(document.createTextNode(labels[i]));
+					chart.appendChild(label);
+				}
+				return chart;
+			};
+
+			var svg = pieChart([12, 23, 34, 45], 640, 400, 200, 200, 150, ['red', 'blue', 'yellow', 'green'], ['North', 'South', 'East', 'West'], 400, 100);
+
+			$('div').append(svg);
+
+		}]);
+	</script>
+
+</body>
+</html
