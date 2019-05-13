@@ -13,10 +13,10 @@ gulp.task('sass', function() {
 gulp.task('browserSync', function() {
 	browserSync.init({
         server: {
-        	port: 8080,
+			port: 8080,
             baseDir: './'
         },
-        startPath: '/src/html/upload.html'
+        startPath: '/src/html/websocket.html'
     });
     gulp.watch(['src/**/*.scss', 'src/**/*.js', './*.html', 'src/**/*.html'], ['sass']).on('change', reload);
 });
