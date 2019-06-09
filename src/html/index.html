@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>test</title>
+    <link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body ng-controller="indexCtrl">
+
+    <button type="button" ng-click="aaa()">按钮</button>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div id="mydiv">222222</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+    <div>1111111</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="/lib/jquery/2.2.4/jquery.min.js"></script>
+    <script src="/lib/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/lib/angular/1.6.8/angular.min.js"></script>
+    <script>
+        var app = angular.module('myApp', []);
+
+        app.controller('indexCtrl', ['$scope', function($scope){
+            $scope.aaa = function () {
+                document.getElementById("mydiv").scrollIntoView({behavior: "instant", block: "end", inline: "nearest"});
+            };
+        }]);
+    </script>
+
+</body>
+</html>

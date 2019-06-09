@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="unitTest">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>unit-test</title>
+    <link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body>
+    <body ng-controller="defaultCtrl">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>Counter: {{counter}}</p>
+                <p>
+                    <button class="btn btn-primary" ng-click="incrementCounter()">Increment</button>
+                </p>
+            </div>
+        </div>
+    </body>
+
+
+    <script src="/lib/jquery/2.2.4/jquery.min.js"></script>
+    <script src="/lib/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/lib/angular/1.6.8/angular.min.js"></script>
+
+    <script>
+        angular.module("unitTest", [])
+        .controller("defaultCtrl", function ($scope, $http) {
+            $scope.counter = 0;
+
+            $scope.incrementCounter = function () {
+                $scope.counter++;
+            };
+
+            $http.get("productData.json").then(function (data) {
+                $scope.products = data;
+            }); 
+        });
+    </script>
+</body>
+</html>

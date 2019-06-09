@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html ng-app="canvas">
+<head>
+  <title>canvas</title>
+  <link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+  <style type="text/css">
+        #drop {
+            background-color: #ccc;
+            width: 400px;
+            height: 400px;
+        }
+  </style>
+</head>
+<body ng-controller="canvasCtrl">
+    <canvas id="drawing" width="200" height="200"></canvas>
+    <canvas id="drawing1" width="200" height="200" draggable="true"></canvas>
+    <div id="drop"></div>
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/lib/jquery/2.2.4/jquery.min.js"></script>
+  <script src="/lib/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="/lib/angular/1.6.8/angular.min.js"></script>
+  <script>
+        var app = angular.module('canvas', []);
+
+        app.controller('canvasCtrl', ['$scope', function($scope){
+
+            var drawing = document.getElementById('drawing');
+            var drawing1 = document.getElementById('drawing1');
+
+            var drop = document.getElementById('drop');
+
+            if(drawing.getContext || drawing1.getContext) {
+                var context = drawing.getContext('2d');
+                var context1 = drawing1.getContext('2d');
+
+                context.fillStyle = "#ff0000";
+                context.fillRect(10, 10, 50, 50);
+
+
+                context.fillStyle = "rgba(0, 0, 255, 0.5)";
+                context.fillRect(30, 30, 50, 50);
+                context.clearRect(40, 40, 10, 10);
+
+
+
+                context1.beginPath();
+                context1.arc(100, 100, 99, 0, 2 * Math.PI, false);//绘制外圆
+
+                context1.moveTo(194, 100);
+                context1.arc(100, 100, 94, 0, 2 * Math.PI, false);//绘制内圆
+
+                context1.moveTo(100, 100);
+                context1.lineTo(100, 15);
+
+                context1.moveTo(100, 100);
+                context1.lineTo(35, 100);
+
+                context1.stroke();
+
+                context1.font = "bold 14px Arial";
+                context1.textAlign = "center";
+                context1.textBaseLine = "middle";
+                context1.fillText("12", 100, 20);
+                context1.fillText("6", 100, 180);
+                context1.fillText("9", 20, 100);
+                context1.fillText("3", 180, 100);
+            }
+
+
+            drawing1.ondragstart = function(event) {
+                var e = event || window.event;
+                e.dataTransfer.setData('text', e.target.id);
+            };
+
+            drawing1.dragenter = function(event) {
+                var e = event || window.event;
+                e.dataTransfer.dropEffect = "move";
+            };
+
+            drop.ondrop = function(event) {
+                var e = event || window.event;
+                var data = e.dataTransfer.getData('text');
+                e.target.appendChild(document.getElementById(data));
+            };
+
+        }]);
+  </script>
+
+</body>
+</html>
