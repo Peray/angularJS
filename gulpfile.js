@@ -13,7 +13,7 @@ gulp.task('sass', function() {
 gulp.task('browserSync', function() {
 	browserSync.init({
         server: {
-        	port: 8080,
+			port: 8080,
             baseDir: './'
         },
         startPath: '/src/html/upload.html'
