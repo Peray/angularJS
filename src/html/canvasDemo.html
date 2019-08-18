@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="canvasDemo">
+<head>
+    <title>canvas-demo</title>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body ng-controller="canvasDemoCtrl">
+    <canvas id="star" width="400" height="400"></canvas>
+    <canvas id="rect" width="400" height="400"></canvas>
+    <canvas id="six" width="400" height="400"></canvas>
+    <canvas id="stars" width="400" height="400"></canvas>
+  
+    <script src="/lib/angular/1.6.8/angular.min.js"></script>
+    <script src="/assets/canvasDemo.js"></script>
+    <script>
+        var app = angular.module('canvasDemo', []);
+
+        app.controller('canvasDemoCtrl', ['$scope', function($scope){
+            /** 五角星*/
+            var starCanvas = document.getElementById('star');
+            var starCxt = starCanvas.getContext('2d');
+            drawStar(starCxt, 50, 100, 200, 200, 0);
+
+            /**矩形*/
+            var rectCanvas = document.getElementById('rect');
+            var rectCxt = rectCanvas.getContext('2d');
+            drawRect(rectCxt, 100, 150, 200, 100);
+
+            /**六边形*/
+            var sixCanvas = document.getElementById('six');
+            var sixCxt = sixCanvas.getContext('2d');
+            drawSix(sixCxt, 100, 200, 200, 0);
+
+            /**星空*/
+            var starsCanvas = document.getElementById('stars');
+            var starsCxt = starsCanvas.getContext('2d');
+            starts(starsCxt, 200, starsCanvas);
+        }]);
+    </script>
+
+</body>
+</html>
