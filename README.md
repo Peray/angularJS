@@ -1,1 +1,1 @@
-# angularStudy
+# angularJS
