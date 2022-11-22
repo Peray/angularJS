@@ -9,7 +9,7 @@
   "author": "peray",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.24.4",
+    "browser-sync": "^2.27.10",
     "gulp": "^3.9.1",
     "gulp-sass": "^4.0.1"
   },
